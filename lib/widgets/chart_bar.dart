@@ -33,33 +33,57 @@ class ChartBar extends StatelessWidget {
           height: 60,
           width: 10,
           child: Stack(
-            // 3次元的にウィジェットを管理
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).primaryColor,
+                  // borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Colors.grey,
+                    // color: Colors.grey,
+                    color: Theme.of(context).primaryColor,
                     width: 1.0,
                   ),
                 ),
               ),
-              // 下の要素との空きを作る
               FractionallySizedBox(
-                // heightFactorに0から1の値を入れる
-                // 1なら親のcontainerの高さ(60)と等しくなる
-                // 0なら高さ0%、1なら高さ100%という考え方で良い
-                heightFactor: spendingPctOfTotal,
+                heightFactor: 1 - spendingPctOfTotal,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                    // borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ),
+              )
             ],
           ),
+          // child: Stack(
+          //   // 3次元的にウィジェットを管理
+          //   children: [
+          //     Container(
+          //       decoration: BoxDecoration(
+          //         color: Color.fromRGBO(220, 220, 220, 1),
+          //         borderRadius: BorderRadius.circular(10),
+          //         border: Border.all(
+          //           color: Colors.grey,
+          //           width: 1.0,
+          //         ),
+          //       ),
+          //     ),
+          //     // 下の要素との空きを作る
+          //     FractionallySizedBox(
+          //       // heightFactorに0から1の値を入れる
+          //       // 1なら親のcontainerの高さ(60)と等しくなる
+          //       // 0なら高さ0%、1なら高さ100%という考え方で良い
+          //       heightFactor: spendingPctOfTotal,
+          //       child: Container(
+          //         decoration: BoxDecoration(
+          //           color: Theme.of(context).primaryColor,
+          //           borderRadius: BorderRadius.circular(10),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ),
         SizedBox(
           height: 4,
