@@ -6,7 +6,7 @@ class ChartBar extends StatelessWidget {
   final double spendingAmount; // 使用額
   final double spendingPctOfTotal; // 支出割合
 
-  ChartBar(
+  const ChartBar(
     this.label,
     this.spendingAmount,
     this.spendingPctOfTotal,

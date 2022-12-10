@@ -27,12 +27,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Quicksand', // デフォルトフォント
         errorColor: Colors.amber,
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
+              headline6: const TextStyle(
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
-              button: TextStyle(color: Colors.white),
+              button: const TextStyle(color: Colors.white),
             ),
       ),
       home: MyHomePage(),
@@ -94,6 +94,62 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeContent(MediaQueryData mediaQuery,
+      PreferredSizeWidget appBar, Widget txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Show Chart!',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+            activeColor: Theme.of(context).primaryColor,
+            value: _showChart,
+            onChanged: (value) {
+              setState(() {
+                _showChart = value;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ?
+          // Chartを格納しているContainer
+          Container(
+              // chartに画面全体の40%分の高さを割り当てる
+              // mediaQuery.size.height: デバイスの高さ
+              // appBar.prefferredSize.height: appBarの高さ
+              // mediaQuery.padding.top: 1番上のステータスバーの高さ
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.65,
+              child: Chart(_recentTransactions))
+          : txListWidget
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(MediaQueryData mediaQuery,
+      PreferredSizeWidget appBar, Widget txListWidget) {
+    return [
+      Container(
+        // chartに画面全体の40%分の高さを割り当てる
+        // mediaQuery.size.height: デバイスの高さ
+        // appBar.prefferredSize.height: appBarの高さ
+        // mediaQuery.padding.top: 1番上のステータスバーの高さ
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      txListWidget
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -105,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
             middle: Text(
               // middleがtitleの代わり
               'Personal Expenses',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontFamily: 'OpenSans',
                 fontSize: 20,
@@ -116,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  child: Icon(
+                  child: const Icon(
                     CupertinoIcons.add,
                     color: Colors.white,
                   ),
@@ -126,9 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         : AppBar(
-            title: Text(
+            title: const Text(
               'Personal Expenses',
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'OpenSans',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -136,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.add,
                   size: 35,
                 ),
@@ -146,12 +202,16 @@ class _MyHomePageState extends State<MyHomePage> {
           );
 
     final Container txListWidget = Container(
-        // transactionListに画面全体の70%分の高さを割り当てる
-        height: (mediaQuery.size.height -
-                appBar.preferredSize.height -
-                mediaQuery.padding.top) *
-            0.7,
-        child: TransactionList(_transactions, _deleteTransaction));
+      // transactionListに画面全体の70%分の高さを割り当てる
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TransactionList(
+        _transactions,
+        _deleteTransaction,
+      ),
+    );
 
     final pageBody = SafeArea(
       child: SingleChildScrollView(
@@ -161,51 +221,17 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (isLandScape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Show Chart!',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Switch.adaptive(
-                    activeColor: Theme.of(context).primaryColor,
-                    value: _showChart,
-                    onChanged: (value) {
-                      setState(() {
-                        _showChart = value;
-                      });
-                    },
-                  ),
-                ],
+              ..._buildLandscapeContent(
+                mediaQuery,
+                appBar,
+                txListWidget,
               ),
             if (!isLandScape)
-              Container(
-                  // chartに画面全体の40%分の高さを割り当てる
-                  // mediaQuery.size.height: デバイスの高さ
-                  // appBar.prefferredSize.height: appBarの高さ
-                  // mediaQuery.padding.top: 1番上のステータスバーの高さ
-                  height: (mediaQuery.size.height -
-                          appBar.preferredSize.height -
-                          mediaQuery.padding.top) *
-                      0.3,
-                  child: Chart(_recentTransactions)),
-            if (!isLandScape) txListWidget,
-            if (isLandScape)
-              _showChart
-                  ?
-                  // Chartを格納しているContainer
-                  Container(
-                      // chartに画面全体の40%分の高さを割り当てる
-                      // mediaQuery.size.height: デバイスの高さ
-                      // appBar.prefferredSize.height: appBarの高さ
-                      // mediaQuery.padding.top: 1番上のステータスバーの高さ
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.65,
-                      child: Chart(_recentTransactions))
-                  : txListWidget
+              ..._buildPortraitContent(
+                mediaQuery,
+                appBar,
+                txListWidget,
+              ),
           ],
         ),
       ),
@@ -225,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton: Platform.isIOS
                 ? Container()
                 : FloatingActionButton(
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     onPressed: () => _startAddNewTransaction(context),
                   ),
           );
