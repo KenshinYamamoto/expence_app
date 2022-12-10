@@ -89,12 +89,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showDialog(String id) {
-    Platform.isIOS
+    Platform.isAndroid
         ? showCupertinoModalPopup(
             context: context,
             builder: (context) => CupertinoAlertDialog(
-              title: Text('iOSHello'),
-              content: Text('iOSContents'),
+              title: Text(
+                'Attention!',
+                style: TextStyle(color: Colors.red),
+              ),
+              content: Text('Are you sure you want to delete the record?'),
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
@@ -106,8 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 CupertinoDialogAction(
                   isDestructiveAction: true,
                   onPressed: () {
-                    Navigator.pop(context);
                     _deleteTransaction(id);
+                    Navigator.pop(context);
                   },
                   child: Text('Yes'),
                 ),
@@ -118,8 +121,11 @@ class _MyHomePageState extends State<MyHomePage> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('AndroidHello'),
-                content: Text('AndroidContents'),
+                title: Text(
+                  'Attention!',
+                  style: TextStyle(color: Colors.red),
+                ),
+                content: Text('Are you sure you want to delete the record?'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -129,8 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
                       _deleteTransaction(id);
+                      Navigator.pop(context);
                     },
                     child: Text('OK'),
                   ),
