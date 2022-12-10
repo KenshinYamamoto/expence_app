@@ -88,64 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _showDialog(String id) {
-    Platform.isAndroid
-        ? showCupertinoModalPopup(
-            context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: Text(
-                'Attention!',
-                style: TextStyle(color: Colors.red),
-              ),
-              content: Text('Are you sure you want to delete the record?'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('No'),
-                ),
-                CupertinoDialogAction(
-                  isDestructiveAction: true,
-                  onPressed: () {
-                    _deleteTransaction(id);
-                    Navigator.pop(context);
-                  },
-                  child: Text('Yes'),
-                ),
-              ],
-            ),
-          )
-        : showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(
-                  'Attention!',
-                  style: TextStyle(color: Colors.red),
-                ),
-                content: Text('Are you sure you want to delete the record?'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _deleteTransaction(id);
-                      Navigator.pop(context);
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-  }
-
   void _deleteTransaction(String id) {
     setState(() {
       _transactions.removeWhere((tx) => tx.id == id);
@@ -209,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 appBar.preferredSize.height -
                 mediaQuery.padding.top) *
             0.7,
-        child: TransactionList(_transactions, _showDialog));
+        child: TransactionList(_transactions, _deleteTransaction));
 
     final pageBody = SafeArea(
       child: SingleChildScrollView(

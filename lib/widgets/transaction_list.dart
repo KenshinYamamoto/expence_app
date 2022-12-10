@@ -1,13 +1,74 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> userTransactions;
-  final Function showDeleteDialog;
+  final Function deleteTransaction;
 
-  TransactionList(this.userTransactions, this.showDeleteDialog);
+  TransactionList(this.userTransactions, this.deleteTransaction);
+
+  void _showDialog(String id, BuildContext context) {
+    Platform.isIOS
+        ? showCupertinoModalPopup(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: Text(
+                'Attention!',
+                style: TextStyle(color: Colors.red),
+              ),
+              content: Text('Are you sure you want to delete the record?'),
+              actions: [
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('No'),
+                ),
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    deleteTransaction(id);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Yes'),
+                ),
+              ],
+            ),
+          )
+        : showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  'Attention!',
+                  style: TextStyle(color: Colors.red),
+                ),
+                content: Text('Are you sure you want to delete the record?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      deleteTransaction(id);
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +142,13 @@ class TransactionList extends StatelessWidget {
                             'Delete',
                           ),
                           onPressed: () =>
-                              showDeleteDialog(userTransactions[index].id),
+                              _showDialog(userTransactions[index].id, context),
                         )
                       : IconButton(
                           icon: Icon(Icons.delete),
                           color: Theme.of(context).primaryColor,
                           onPressed: () =>
-                              showDeleteDialog(userTransactions[index].id),
+                              _showDialog(userTransactions[index].id, context),
                         ),
                 ),
               );
