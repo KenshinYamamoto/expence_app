@@ -76,7 +76,6 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactionValues);
     return Card(
       elevation: 6, // ドロップシャドウを更に強調
       margin: EdgeInsets.all(20),
