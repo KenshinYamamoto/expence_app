@@ -17,16 +17,44 @@ class _NewTransactionState extends State<NewTransaction> {
   final _amountController = TextEditingController();
   DateTime _selectedDate;
 
+  void _showDialog(String contentStr) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Attention!',
+          style: const TextStyle(color: Colors.red),
+        ),
+        content: Text(contentStr),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _submitData() {
-    if (_amountController.text.isEmpty) {
+    if (_titleController.text.isEmpty ||
+        _amountController.text.isEmpty ||
+        _selectedDate == null) {
+      _showDialog('必須項目の欠落');
       return;
     }
+
+    try {
+      print(double.parse(_amountController.text));
+    } catch (e) {
+      _showDialog('Amountには数字のみ入力');
+      return;
+    }
+
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
-
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
-      return;
-    }
 
     // Stateクラスの中にaddNewTransactionは特別なプロパティとして保持されているので、
     // 異なるクラスで保持されているaddNewTransactionを実行するには、widget.~の形で実行する
