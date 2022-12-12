@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 import './adaptive_flat_button.dart';
@@ -18,24 +21,46 @@ class _NewTransactionState extends State<NewTransaction> {
   DateTime _selectedDate;
 
   void _showDialog(String contentStr) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Attention!',
-          style: const TextStyle(color: Colors.red),
-        ),
-        content: Text(contentStr),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
+    Platform.isIOS
+        ? showCupertinoDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: const Text(
+                  'Attention',
+                  style: TextStyle(color: Colors.red),
+                ),
+                content: Text(contentStr),
+                actions: [
+                  CupertinoDialogAction(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    isDestructiveAction: true,
+                  ),
+                ],
+              );
             },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+          )
+        : showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text(
+                'Attention!',
+                style: const TextStyle(color: Colors.red),
+              ),
+              content: Text(contentStr),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
   }
 
   void _submitData() {

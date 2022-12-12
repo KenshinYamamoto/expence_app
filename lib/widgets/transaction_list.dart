@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:expense_planner/widgets/transaction_item.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,33 +14,35 @@ class TransactionList extends StatelessWidget {
 
   void _showDialog(String id, BuildContext context) {
     Platform.isIOS
-        ? showCupertinoModalPopup(
+        ? showCupertinoDialog(
             context: context,
-            builder: (context) => CupertinoAlertDialog(
-              title: const Text(
-                'Attention!',
-                style: TextStyle(color: Colors.red),
-              ),
-              content:
-                  const Text('Are you sure you want to delete the record?'),
-              actions: [
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('No'),
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: const Text(
+                  'Attention',
+                  style: TextStyle(color: Colors.red),
                 ),
-                CupertinoDialogAction(
-                  isDestructiveAction: true,
-                  onPressed: () {
-                    deleteTransaction(id);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Yes'),
-                ),
-              ],
-            ),
+                content:
+                    const Text('Are you sure you want to delete the record?'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    isDefaultAction: true,
+                  ),
+                  CupertinoDialogAction(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      deleteTransaction(id);
+                      Navigator.pop(context);
+                    },
+                    isDestructiveAction: true,
+                  ),
+                ],
+              );
+            },
           )
         : showDialog(
             context: context,
