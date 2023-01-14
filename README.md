@@ -1,16 +1,15 @@
-# expense_planner
+# 支出管理アプリ
 
-A new Flutter project.
+Flutterへの知識をさらに深める為に作成したアプリケーション
 
-## Getting Started
+## デモ
 
-This project is a starting point for a Flutter application.
+![デモアプリケーション](assets/images/ExplanationPicture.png)
 
-A few resources to get you started if this is your first Flutter project:
+- 買った物と値段を入力してバーとリストを更新する
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 学んだこと
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 基本的なウィジェットの使い方
+- AndroidとiOSに応じて使用するウィジェットを変更する方法
+- アプリケーションを横画面に対応させる方法
